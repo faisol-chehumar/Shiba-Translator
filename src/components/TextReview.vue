@@ -332,7 +332,7 @@ export default {
       this.wordEn = text
 
       var foo = false
-      $('#th-input').focus()
+      $('#th-input').focus().unbind('keydown')
       .on('keydown', function(e) {
         if(e.which == 13 & !foo) {
           e.preventDefault()
