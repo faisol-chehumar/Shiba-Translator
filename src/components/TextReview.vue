@@ -67,54 +67,10 @@
 </template>
 
 <script>
-var user = prompt("Halooo!! Please Enter Your name.")
-var configUser = ''
-if(user.toLowerCase() === 'test') {
-  configUser = {
-    apiKey: "AIzaSyAnQd3kIaap9PwMV5M5nSBvmnu7SO7pLS0",
-    authDomain: "shiba-translator.firebaseapp.com",
-    databaseURL: "https://shiba-translator.firebaseio.com",
-    projectId: "shiba-translator",
-    storageBucket: "shiba-translator.appspot.com",
-    messagingSenderId: "130395626012"
-  }
-}
-if(user.toLowerCase() === 'arm') {
-  configUser = {
-    apiKey: "AIzaSyAilnfkpZ2lf6Yl86HveAj9RT3E9CG91Vc",
-    authDomain: "arm-translation.firebaseapp.com",
-    databaseURL: "https://arm-translation.firebaseio.com",
-    projectId: "arm-translation",
-    storageBucket: "arm-translation.appspot.com",
-    messagingSenderId: "494144728490"
-  }
-}
-if(user.toLowerCase() === 'chai') {
-  configUser = {
-    apiKey: "AIzaSyDIrJNoNCJ5TRb1DjkLrKdAO-qUhPVfhuQ",
-    authDomain: "chai-translation.firebaseapp.com",
-    databaseURL: "https://chai-translation.firebaseio.com",
-    projectId: "chai-translation",
-    storageBucket: "chai-translation.appspot.com",
-    messagingSenderId: "903538595751"
-  }
-}
-if(user.toLowerCase() === 'aong') {
-  configUser = {
-    apiKey: "AIzaSyCgvy6hGPf6FLIVvUQB4Mc7EMQIxmZBjKA",
-    authDomain: "aong-translation.firebaseapp.com",
-    databaseURL: "https://aong-translation.firebaseio.com",
-    projectId: "aong-translation",
-    storageBucket: "aong-translation.appspot.com",
-    messagingSenderId: "902026764830"
-  }
-}
-
-// import Data from '../assets/data.json';
-import Firebase from 'firebase'
-
-// Integrate with Firebase service with Account
-// let configUser = {
+// var user = prompt("Halooo!! Please Enter Your name.")
+// var configUser = ''
+// if(user.toLowerCase() === 'test') {
+//   configUser = {
 //     apiKey: "AIzaSyAnQd3kIaap9PwMV5M5nSBvmnu7SO7pLS0",
 //     authDomain: "shiba-translator.firebaseapp.com",
 //     databaseURL: "https://shiba-translator.firebaseio.com",
@@ -122,6 +78,50 @@ import Firebase from 'firebase'
 //     storageBucket: "shiba-translator.appspot.com",
 //     messagingSenderId: "130395626012"
 //   }
+// }
+// if(user.toLowerCase() === 'arm') {
+//   configUser = {
+//     apiKey: "AIzaSyAilnfkpZ2lf6Yl86HveAj9RT3E9CG91Vc",
+//     authDomain: "arm-translation.firebaseapp.com",
+//     databaseURL: "https://arm-translation.firebaseio.com",
+//     projectId: "arm-translation",
+//     storageBucket: "arm-translation.appspot.com",
+//     messagingSenderId: "494144728490"
+//   }
+// }
+// if(user.toLowerCase() === 'chai') {
+//   configUser = {
+//     apiKey: "AIzaSyDIrJNoNCJ5TRb1DjkLrKdAO-qUhPVfhuQ",
+//     authDomain: "chai-translation.firebaseapp.com",
+//     databaseURL: "https://chai-translation.firebaseio.com",
+//     projectId: "chai-translation",
+//     storageBucket: "chai-translation.appspot.com",
+//     messagingSenderId: "903538595751"
+//   }
+// }
+// if(user.toLowerCase() === 'aong') {
+//   configUser = {
+//     apiKey: "AIzaSyCgvy6hGPf6FLIVvUQB4Mc7EMQIxmZBjKA",
+//     authDomain: "aong-translation.firebaseapp.com",
+//     databaseURL: "https://aong-translation.firebaseio.com",
+//     projectId: "aong-translation",
+//     storageBucket: "aong-translation.appspot.com",
+//     messagingSenderId: "902026764830"
+//   }
+// }
+
+// import Data from '../assets/data.json';
+import Firebase from 'firebase'
+
+// Integrate with Firebase service with Account
+let configUser = {
+    apiKey: "AIzaSyAnQd3kIaap9PwMV5M5nSBvmnu7SO7pLS0",
+    authDomain: "shiba-translator.firebaseapp.com",
+    databaseURL: "https://shiba-translator.firebaseio.com",
+    projectId: "shiba-translator",
+    storageBucket: "shiba-translator.appspot.com",
+    messagingSenderId: "130395626012"
+  }
 // let configUser = {
 // apiKey: "AIzaSyAilnfkpZ2lf6Yl86HveAj9RT3E9CG91Vc",
 //     authDomain: "arm-translation.firebaseapp.com",
@@ -181,7 +181,7 @@ export default {
     dictRef: {
       deep: true,
       handler(newArray) {
-        this.test()
+        this.initDict()
         // console.log( 'Change detected...' )
       } 
     }
@@ -204,11 +204,11 @@ export default {
       // console.log(this.translatedHistory)
       this.getPreview()
     },
-    test() {
-      this.dictInit()
+    initDict() {
+      this.dictTable()
       let dictData = this.dictRef.length
       let keyword = this.dictRef
-      // console.log(dictData)
+      console.log('dictionary length: ' + dictData)
       for (let i = dictData - 1; i >= 0; i--) {
         this.setDict(keyword[i]['.key'], keyword[i]['.value'])
       }
@@ -265,7 +265,7 @@ export default {
     getThDesc() {
       return this.descJson[this.descPos].Translated.split(/<br\s*[\/]?>/gi)
     },
-    dictInit() {
+    dictTable() {
       this.descDict = new HashTable(1000)
     },
     setDict(word, translate) {
@@ -273,7 +273,13 @@ export default {
     },
     // Remove all special charater
     removeSpecialChar(str) {
-      return str.replace(/[`~!@#$%^&*()_|+=?;:'",.<>\{\}\[\]\\\/]/gi, "")
+      return str.replace(/[`~!@#$%^&*()_|+=?;:",.<>\{\}\[\]\\\/]/gi, "")
+    },
+    setDictData(wordEn, wordTh) {
+      let wordLength = wordEn.split(' ').length
+      if(wordLength <= 3) {
+        dbDict.ref(wordEn).set(wordTh)  
+      }
     },
     translate() {
       let re = ''
@@ -295,18 +301,12 @@ export default {
         }
       }
 
-      // Keep only latest keyword change
-      // console.log('Enter')
-      console.log(translatedList)
       this.translatedHistory.pop()
       this.translatedHistory.push(translatedList)
       // console.log('Translate History' + this.translatedHistory)
 
       this.updateTranslate()
-      let wordlength = wordEn.split(' ').length
-      if(wordlength <= 3) {
-        dbDict.ref(wordEn).set(this.wordTh)  
-      }
+      this.setDictData(wordEn, this.wordTh)
       // this.wordEn = ''
       this.wordTh = ''
     },
