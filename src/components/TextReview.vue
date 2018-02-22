@@ -1,18 +1,25 @@
 <template>
   <div>
-    <div class="logo" style="height: 100px; background: #322c48; color: #fff; z-index: 1006; padding-bottom: 1rem; position: fixed; top: 0; width: 100%">
-      <img src="../assets/shiba-translator.png" width="100rem" alt="Shiba Translator App">
-      <h1>{{ appName + veresion }}</h1>
-      <div style="display: inline-block; margin-left: 1.5rem; top: -3.5rem; position: relative">
-        <button class="ui red button" @click="start">Start</button>
-        <button class="ui green button" @click="load">Load</button>
-        <button class="ui green button" @click="undo">Undo</button>
-      </div>
-      <div class="" style="position: absolute; top: 2.5rem; right: 2rem">
-        <div class="ui input" style="width: 5rem; height: 2rem; background-color: #eee">
-          <input id="jump-desc" type="text" v-model="descPos" style="text-align: center" @click="jumpDesc">
+    <div class="logo" style="height: 100px; background-image: linear-gradient(to right, #2f1f48, #2d1632, #241120, #180911, #000000); color: #fff; z-index: 1006; padding-bottom: 1rem; position: fixed; top: 0; width: 100%">
+      <div>
+        <div style="float: left">
+          <img src="../assets/shiba-translator.png" width="100rem" alt="Shiba Translator App">
+          <h1>{{ appName + veresion }}</h1>
+          <div style="display: inline-block; margin-left: 1.5rem; top: -3.5rem; position: relative">
+            <button class="ui red button" @click="start">Start</button>
+            <button class="ui green button" @click="load">Load</button>
+            <button class="ui gray button" @click="undo">Undo</button>
+          </div>
         </div>
-        <h3 style="display: inline"> / {{ descLength }}</h3>
+        <div style="position: absolute; right: 12rem; top: 0">
+          <img v-bind:src="sticker" width="175rem" height="100rem" alt="Shiba Translator App">
+        </div>
+        <div class="" style="position: absolute; top: 2.5rem; right: 2rem">
+          <div class="ui input" style="width: 5rem; height: 2rem; background-color: #eee">
+            <input id="jump-desc" type="text" v-model="descPos" style="text-align: center" @click="jumpDesc">
+          </div>
+          <h3 style="display: inline"> / {{ descLength }}</h3>
+        </div>
       </div>
     </div> 
     <!-- End header -->
@@ -102,6 +109,7 @@ if(user.toLowerCase() === 'aong') {
     messagingSenderId: "902026764830"
   }
 }
+
 // import Data from '../assets/data.json';
 import Firebase from 'firebase'
 
@@ -159,6 +167,7 @@ export default {
       descDict: '',
       dictRef: [],
       descUrl: '',
+      sticker: '',
       translatedHistory: []
     }
   },
@@ -222,10 +231,28 @@ export default {
       let dataPos = '/' + pos
       db.ref(dataPos).update({"Translated": word})
     },
+    getStickerUrl(id) {
+      this.sticker = 'https://media.giphy.com/media/' + id + '/giphy.gif'
+      // console.log(this.sticker)
+    },
+    getStickerId() {
+      // console.log('hello')
+      let xhr = $.get("https://api.giphy.com/v1/gifs/random?api_key=RvnijNZUe3lkqjvnM6prPvNWSrbJAdAT&tag=&rating=R");
+      var sticker_id = ''
+      var stickerUrl = this.getStickerUrl
+      // console.log(stickerUrl('test'))
+      xhr.done(function(data, xxx) { 
+        sticker_id = data.data.id
+        stickerUrl(sticker_id)
+      })
+    },
     getPreview() {
       this.descEn = this.getEnDesc()
       this.descTh = this.getThDesc()
       this.descUrl = this.getUrl()
+
+      this.getStickerId()
+      // console.log(this.sticker)
     },
     getUrl() {
       // this.descUrl = 'https://thai.webike.net/products/' + this.descJson[this.descPos].Syouhin_Sys_Code
