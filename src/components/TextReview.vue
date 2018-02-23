@@ -273,11 +273,13 @@ export default {
     },
     // Remove all special charater
     removeSpecialChar(str) {
-      return str.replace(/[`~!@#$%^&*()_|+=?;:",.<>\{\}\[\]\\\/]/gi, "")
+      return str.replace(/[`~!@#$%^&*()_|+=?;:"<>\{\}\[\]\\\/]/gi, "")
     },
     setDictData(wordEn, wordTh) {
       let wordLength = wordEn.split(' ').length
-      if(wordLength <= 3) {
+      let engValidator = /[A-Za-z]/gi.test(wordEn)
+      // Accept word only less than 3 word and only contain English alphabet
+      if(wordLength <= 3 && engValidator === true ) {
         dbDict.ref(wordEn).set(wordTh)  
       }
     },
@@ -301,14 +303,13 @@ export default {
         }
       }
 
+      // Translated History Handle
       this.translatedHistory.pop()
       this.translatedHistory.push(translatedList)
-      // console.log('Translate History' + this.translatedHistory)
 
       this.updateTranslate()
       this.setDictData(wordEn, this.wordTh)
-      // this.wordEn = ''
-      this.wordTh = ''
+      // this.wordTh = ''
     },
     updateTranslate() {
       this.getPreview()
