@@ -9,6 +9,7 @@
             <button class="ui red button" @click="start">Start</button>
             <button class="ui green button" @click="load">Load</button>
             <button class="ui gray button" @click="undo">Undo</button>
+            <button class="ui yellow button" @click="onePageReplace">One page replace</button>
           </div>
         </div>
         <div style="position: absolute; right: 12rem; top: 0">
@@ -273,7 +274,7 @@ export default {
     },
     // Remove all special charater
     removeSpecialChar(str) {
-      return str.replace(/[`~!@#$%^&*()_|+=?;:"<>\{\}\[\]\\\/]/gi, "")
+      return str.replace(/[`~!@#$%^*()_|+=?;:<>\{\}\[\]\\]/gi, "")
     },
     setDictData(wordEn, wordTh) {
       let wordLength = wordEn.split(' ').length
@@ -282,6 +283,20 @@ export default {
       if(wordLength <= 3 && engValidator === true ) {
         dbDict.ref(wordEn).set(wordTh)  
       }
+    },
+    onePageReplace() {
+      let translatedList = []
+      let wordEn = this.wordEn
+      let wordTh = this.wordTh
+      translatedList.push({[this.descPos]: this.descJson[this.descPos].Translated})
+      let newText = this.descJson[this.descPos].Translated.replace(wordEn, wordTh)
+
+      // Translated History Handle
+      this.translatedHistory.pop()
+      this.translatedHistory.push(translatedList)
+
+      this.save(this.descPos, newText)
+      this.updateTranslate()
     },
     translate() {
       let re = ''
