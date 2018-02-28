@@ -11,6 +11,7 @@
             <button class="ui gray button" @click="undo">Undo</button>
             <button class="ui black button" @click="autoTranslateAll">Auto Translate All</button>
             <button class="ui black button" @click="autoTranslate">Auto Translate</button>
+            <button class="ui black button" @click="reset">Reset</button>
           </div>
         </div>
         <div style="position: absolute; right: 12rem; top: 0">
@@ -210,6 +211,11 @@ export default {
     }
   },
   methods: {
+    reset() {
+      let newText = this.descJson[this.descPos].English
+      this.save(this.descPos, newText)
+      this.getPreview()      
+    },
     processTranslate(text) {
       let dictionary = this.descDict
       // console.log(dictionary)
@@ -361,8 +367,10 @@ export default {
     },
     setDictData(wordEn, wordTh) {
       let wordLength = wordEn.split(' ').length
-      let engValidator = /[A-Za-z]/gi.test(wordEn)
+      let engValidator = /[a-zA-Z]+(-[a-zA-Z]+)*$/.test(wordEn)
       // Accept word only less than 3 word and only contain English alphabet
+      console.log(wordEn)
+      console.log(engValidator)
       if(wordLength <= 3 && engValidator === true ) {
         dbDict.ref(wordEn.toLowerCase()).set(wordTh)  
       }
@@ -379,6 +387,7 @@ export default {
       this.translatedHistory.push(translatedList)
 
       this.save(this.descPos, newText)
+      this.setDictData(wordEn, wordTh)
       this.updateTranslate()
     },
     translate() {
