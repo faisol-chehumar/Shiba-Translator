@@ -9,7 +9,6 @@
             <button class="ui red button" @click="start">Start</button>
             <button class="ui green button" @click="load">Load</button>
             <button class="ui gray button" @click="undo">Undo</button>
-            <button class="ui yellow button" @click="onePageReplace">One page replace</button>
             <button class="ui black button" @click="autoTranslateAll">Auto Translate All</button>
             <button class="ui black button" @click="autoTranslate">Auto Translate</button>
           </div>
@@ -53,13 +52,14 @@
     <div class="ui vertical stripe segment" style="background: #322c48; padding: 2rem 0; position: fixed; bottom: 0; width: 100%">
       <div class="row">
         <div class="twenty wide column">
-          <div class="ui input" style="width: 500px">
+          <div class="ui input" style="width: 470px">
             <input type="text" placeholder="EN Word" v-model="wordEn">  
           </div>
-          <div class="ui input" style="width: 500px">
+          <div class="ui input" style="width: 470px">
             <input id="th-input" type="text" placeholder="TH Word" v-model="wordTh">
           </div>
           <button class="ui blue button" @click="translate">Search and Replace</button>
+          <button class="ui yellow button" @click="onePageReplace">One page replace</button>
           <button class="ui button" @click="prevDesc">Prev</button>
           <button class="ui button" @click="nextDesc">Next</button>
         </div>
@@ -110,6 +110,17 @@ if(user.toLowerCase() === 'aong') {
     projectId: "aong-translation",
     storageBucket: "aong-translation.appspot.com",
     messagingSenderId: "902026764830"
+  }
+}
+
+if(user.toLowerCase() === 'chai-office') {
+  configUser = {
+    apiKey: "AIzaSyAXsI7kc0gAdnb7aGIOmL76Akgd8rOVKL8",
+    authDomain: "chai-office.firebaseapp.com",
+    databaseURL: "https://chai-office.firebaseio.com",
+    projectId: "chai-office",
+    storageBucket: "chai-office.appspot.com",
+    messagingSenderId: "186542880891"
   }
 }
 
@@ -214,13 +225,23 @@ export default {
       return postText
     },
     autoTranslateAll() {
-      for(let i = this.descJson.length - 1; i >= 0; i--) {
-          let text = this.descJson[i].Translated
-          let translateText = this.processTranslate(text)
-          // console.log(translateText)
-          this.save(i, translateText)
+      let isSure = prompt("Heyyy!! Are you sure? (Y/N))")
+      if(isSure === 'Y') {
+        let translatedList = []
+        for(let i = this.descJson.length - 1; i >= 0; i--) {
+            let text = this.descJson[i].Translated
+            translatedList.push({[i]: text})
+            let translateText = this.processTranslate(text)
+            // console.log(translateText)
+            this.save(i, translateText)
+        }
+
+        // Translated History Handle
+        this.translatedHistory.pop()
+        this.translatedHistory.push(translatedList)
+
+        this.getPreview()
       }
-      this.getPreview()
     },
     autoTranslate() {
       let text = this.descJson[this.descPos].English
@@ -228,6 +249,16 @@ export default {
       // console.log(translateText)
       this.save(this.descPos, translateText)
       this.getPreview()
+
+      let translatedList = []
+      translatedList.push({[this.descPos]: text})
+
+      // Translated History Handle
+      this.translatedHistory.pop()
+      this.translatedHistory.push(translatedList)
+
+      this.save(this.descPos, newText)
+      this.updateTranslate()
     },
     undo() {
       // let history = [Object.assign([], this.translatedHistory)]
