@@ -10,6 +10,8 @@
             <button class="ui green button" @click="load">Load</button>
             <button class="ui gray button" @click="undo">Undo</button>
             <button class="ui yellow button" @click="onePageReplace">One page replace</button>
+            <button class="ui black button" @click="autoTranslateAll">Auto Translate All</button>
+            <button class="ui black button" @click="autoTranslate">Auto Translate</button>
           </div>
         </div>
         <div style="position: absolute; right: 12rem; top: 0">
@@ -34,14 +36,14 @@
           </div>
         </div>
         <!-- End Preview content -->
-        <div class="column">
-          <div class="eight wide column" style="padding: 2rem">
+        <div class="column" sytle="height: 36rem">
+          <div class="eight wide column" style="padding: 2rem; overflow-y: scroll; height: 36rem">
             <p id="en-content" class="eng" v-for="textEn in descEn" @click="getDataHilight">{{ textEn }}</p>
           </div>
         </div>
         <!-- End English text preview -->
-        <div class="column">
-          <div class="eight wide right floated column" style="padding: 2rem">
+        <div class="column" sytle="height: 36rem">
+          <div class="eight wide right floated column" style="padding: 2rem; overflow-y: scroll; height: 36rem">
             <p class="th" v-for="textTh in descTh" @click="getDataHilight">{{ textTh }}</p>
           </div>
         </div>
@@ -183,11 +185,50 @@ export default {
       deep: true,
       handler(newArray) {
         this.initDict()
+
+        // for(let i = this.descJson.length - 1; i >= 0; i--) {
+        //     let text = this.descJson[i].Translated
+        //     let translateText = this.processTranslate(text)
+        //     console.log(translateText)
+        //     this.save(i, translateText)
+        // }
+        // this.getPreview()
+      }
+        // this.descDict.get('Special สี')
         // console.log( 'Change detected...' )
-      } 
     }
   },
   methods: {
+    processTranslate(text) {
+      let dictionary = this.descDict
+      // console.log(dictionary)
+      let textList = getTextList(text)
+      // console.log(textList)
+      let translateTextList = textList.map((textInLine) => {
+        // console.log(textInLine)
+        return translateByLine(textInLine, dictionary)
+      })
+      // console.log(translateTextList)
+      let postText = setPostText(translateTextList)
+      // console.log(postText)
+      return postText
+    },
+    autoTranslateAll() {
+      for(let i = this.descJson.length - 1; i >= 0; i--) {
+          let text = this.descJson[i].Translated
+          let translateText = this.processTranslate(text)
+          // console.log(translateText)
+          this.save(i, translateText)
+      }
+      this.getPreview()
+    },
+    autoTranslate() {
+      let text = this.descJson[this.descPos].English
+      let translateText = this.processTranslate(text)
+      // console.log(translateText)
+      this.save(this.descPos, translateText)
+      this.getPreview()
+    },
     undo() {
       // let history = [Object.assign([], this.translatedHistory)]
       // let historyPos = this.translatedHistory.length
@@ -206,6 +247,13 @@ export default {
       this.getPreview()
     },
     initDict() {
+      // this.dictTable()
+      // let dictData = this.dictRef.length
+      // let keyword = this.dictRef
+      // console.log('dictionary length: ' + dictData)
+      // for (let i = dictData - 1; i >= 0; i--) {
+      //   this.setDict(keyword[i]['.key'], keyword[i]['.value'])
+      // }
       this.dictTable()
       let dictData = this.dictRef.length
       let keyword = this.dictRef
@@ -227,6 +275,9 @@ export default {
       for (var i = 0; i <= this.descLength - 1; i++) {
         this.descJson[i].Translated = this.descJson[i].Translated
       }
+      // console.log(this.descDict)
+      // console.log(this.descDict.get('Special สี'))
+
     },
     save(pos, word) {
       let dataPos = '/' + pos
@@ -267,10 +318,11 @@ export default {
       return this.descJson[this.descPos].Translated.split(/<br\s*[\/]?>/gi)
     },
     dictTable() {
-      this.descDict = new HashTable(1000)
+      // this.descDict = new HashTable(1000)
+      this.descDict = {}
     },
     setDict(word, translate) {
-      this.descDict.insert(word, translate)
+      this.descDict[word] = translate
     },
     // Remove all special charater
     removeSpecialChar(str) {
@@ -281,7 +333,7 @@ export default {
       let engValidator = /[A-Za-z]/gi.test(wordEn)
       // Accept word only less than 3 word and only contain English alphabet
       if(wordLength <= 3 && engValidator === true ) {
-        dbDict.ref(wordEn).set(wordTh)  
+        dbDict.ref(wordEn.toLowerCase()).set(wordTh)  
       }
     },
     onePageReplace() {
@@ -318,6 +370,7 @@ export default {
         }
       }
 
+      // console.log('translate')
       // Translated History Handle
       this.translatedHistory.pop()
       this.translatedHistory.push(translatedList)
@@ -401,72 +454,132 @@ export default {
   }
 }
 
-function HashTable(size) {
-  this.buckets = Array(size)
-  this.numBuckets = this.buckets.length
+// Make capitalize to frist character of each line
+String.prototype.capitalize = function() {
+  // console.log('hello')
+  return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
-// constructor for hash node
-function HashNode(key, value, next) {
-  this.key = key
-  this.value = value
-  this.next = next || null
+// Seperate text by <br>
+function removeBr(text) {
+  return text.split(/<br\s*[\/]?>/gi)
 }
 
-// The hash function takes in a key and return a bucket number which will be used as our index for the key
-HashTable.prototype.hash = function(key) {
-  let total = 0
-  for(let i = 0; i < key.length; i++) {
-    total += key.charCodeAt(i)
+// Join array list with <br>
+function joinBr(text) {
+  return text.join('<br>')
+}
+
+// Make normalize text
+function getTextList(text) {
+  let textList = removeBr(text)
+  let normalTextList = textList.map((text) => {
+    return text.toLowerCase()
+  }) 
+  return normalTextList
+}
+
+// Make normalize text to post-process text
+function setPostText(textList) {
+  // console.log(textList)
+  let postText = textList.map((text) => {
+    return text.capitalize()
+  })
+
+  // console.log(postText)
+  
+  return postText.join('<br>')
+}
+
+// Translate word from dictionary
+function translate(word, dictionary) {
+  // return (dictionary[word] !== undefined) ? dictionary[word] : word 
+  // console.log('word: ' + word)
+  word = word.replace(/((\s*\S+)*)\s*/, "$1")
+  let format = /[`~!@#$%^*()_|+=?;:<>\{\}\[\]\\]/
+  let lastStrPos = word.length - 1
+  let validWord = word
+  let firstStr = ''
+  let lastStr = ''
+  let str = ''
+  // console.log(firstStr)
+  // console.log('validWord: ' + validWord)
+  if(format.test(word[0])) {
+    validWord = validWord.substr(1)
+    firstStr = word[0]
   }
-  let bucket = total % this.numBuckets
-  return bucket
+  if(format.test(word[lastStrPos])) {
+    validWord = validWord.slice(0, -1)
+    lastStr = word[lastStrPos]
+  }
+  
+  // console.log(lastStrPos)
+  // console.log(word[lastStrPos])
+  // console.log(word)
+  // console.log(firstStr)
+  str = dictionary[validWord] !== undefined ? firstStr + dictionary[validWord] + lastStr : undefined
+  // console.log(dictionary[validWord])
+  // let xStr = firstStr + dictionary[validWord] + lastStr
+  // console.log(xStr)
+  // console.log(lastStr)
+  // console.log('-----------')
+  
+  // console.log(format.test(word[0]))
+  // if()
+  // word.replace(/[`~!@#$%^*()_|+=?;:<>\{\}\[\]\\]/gi, "")
+  return str
 }
 
-// When inserting or updating a node we are running the key through our hashing function and then checking for
-// collisons - if there is a collisons, we traverse the bucket's chain and find the last node and insert at that
-// position
-HashTable.prototype.insert = function(key, value) {
-  let index = this.hash(key)
-  if(!this.buckets[index]) {
-    this.buckets[index] = new HashNode(key, value)
-  } else if(this.buckets[index].key === key) {
-    this.buckets[index].value = value
+function getBlockWord(wordInLine, wordLength, wordPos) {
+  let word = []
+  for(let i = 0; i < wordLength; i++) {
+    word.push(wordInLine[wordPos + i])
+  }
+  return word.join(' ')
+}
+
+
+function getBlockWordLength(textInline) {
+  return (textInline.length < 3) ? textInline.length : 3 
+}
+
+function translateBlock(blockLength, textLineByArray, dictionary) {
+  let textPos = 0
+  let translateBlock = []
+  let textLineByArraySize = textLineByArray.length
+  // console.log(textLineByArraySize)
+  // console.log('---------------')
+  if(textLineByArraySize <  blockLength) {
+    translateBlock = textLineByArray
   } else {
-    let currentNode = this.buckets[index]
-    while(currentNode.next) {
-      if(currentNode.next.key === key) {
-        current.next.value = value
-        return
+    for(let j = 0; j <= textLineByArraySize - 1; j++) {
+      let word = getBlockWord(textLineByArray, blockLength, textPos)
+      // console.log(word)
+      let translatedWord = translate(word, dictionary)
+      if(translatedWord !== undefined) {
+        translateBlock.push(translatedWord)
+        j += (blockLength - 1)
+      } else {
+        translateBlock.push(textLineByArray[j])
       }
-      currentNode = currentNode.next
-    }
-    currentNode.next = new HashNode(key, value)
-  }
-}
-
-// search for particular node by key Namespace
-HashTable.prototype.get = function(key) {
-  let index = this.hash(key)
-  if(!this.buckets[index]) return null
-  let currentNode = this.buckets[index]
-  while(currentNode) {
-    if(currentNode.key === key) return currentNode.value
-    currentNode = currentNode.next
-  }
-}
-
-// iterates through all buckets, and checks for chain in each bucket - return array of all hash nodes
-HashTable.prototype.retriveAll = function() {
-  let allNode = []
-  for(let i = 0; i<this.numBuckets; i++) {
-    let currentNode = this.buckets[i]
-    while(currentNode) {
-      allNode.push(currentNode)
-      currentNode = currentNode.next
+      textPos++
     }
   }
-  return allNodes
+
+  // console.log(translateBlock)
+  return translateBlock
+}
+
+function translateByLine(textLine, dictionary) {
+  let textLineByArray = textLine.split(' ')
+  let blockLength = getBlockWordLength(textLineByArray)
+  let translateLine = []
+  
+  let stepOne = translateBlock(3, textLineByArray, dictionary)
+  let stepTwo = translateBlock(2, stepOne, dictionary)
+  let stepThree = translateBlock(1, stepTwo, dictionary)
+
+  return stepThree.join(' ')
 }
 
 </script>
@@ -478,4 +591,9 @@ HashTable.prototype.retriveAll = function() {
     position: relative;
     top: -3rem;
  }
+
+p:lang(th) { 
+  color: Blue;
+  font-weight: 800;
+}
 </style>
