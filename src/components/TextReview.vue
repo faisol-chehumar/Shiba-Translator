@@ -172,7 +172,7 @@ export default {
   data () {
     return {
       appName: 'Shiba Translator',
-      veresion: ' 0.0.5',
+      veresion: ' 1.0.0',
       descPos: 0,
       descLength: 0,
       descEn: '',
@@ -212,8 +212,15 @@ export default {
   },
   methods: {
     reset() {
+      let translatedList = []
+      translatedList.push({[this.descPos]: this.descJson[this.descPos].Translated})
       let newText = this.descJson[this.descPos].English
       this.save(this.descPos, newText)
+
+      // Translated History Handle
+      this.translatedHistory.pop()
+      this.translatedHistory.push(translatedList)
+
       this.getPreview()      
     },
     processTranslate(text) {
@@ -263,7 +270,7 @@ export default {
       this.translatedHistory.pop()
       this.translatedHistory.push(translatedList)
 
-      this.save(this.descPos, newText)
+      // this.save(this.descPos, newText)
       this.updateTranslate()
     },
     undo() {
@@ -363,7 +370,7 @@ export default {
     },
     // Remove all special charater
     removeSpecialChar(str) {
-      return str.replace(/[`~!@#$%^*()_|+=?;:<>\{\}\[\]\\]/gi, "")
+      return str.replace(/[`~!@#$^*()_|+=?;:<>\{\}\[\]\\]/gi, "")
     },
     setDictData(wordEn, wordTh) {
       let wordLength = wordEn.split(' ').length
@@ -466,7 +473,9 @@ export default {
         text = document.selection.createRange().text
       }
       this.wordEn = text
-
+      // let nextPage = this.nextDesc()
+      // let prevPage = this.prevDesc()
+      // console.log(this.nextDesc())
       var foo = false
       $('#th-input').focus().unbind('keydown')
       .on('keydown', function(e) {
@@ -478,6 +487,25 @@ export default {
           foo = true;
         }
       })
+
+
+      // $(document).keydown(function(e, nextPage, prevPage) {
+      //   console.log(nextPage)
+      //   e.preventDefault() 
+      //   switch(e.which) {
+      //     case 37:
+      //       // Left Key Pressed
+      //       prevPage()
+      //       break
+      //     case 39:
+      //       // Right Key Pressed
+      //       nextPage()
+      //       break
+      //     default:
+      //       return
+      //   }
+      // })
+
     },
     // Start application process
     start() {
