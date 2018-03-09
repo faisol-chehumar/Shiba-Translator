@@ -125,6 +125,17 @@ if(user.toLowerCase() === 'chai-office') {
   }
 }
 
+if(user.toLowerCase() === 'arm-office') {
+  configUser = {
+    apiKey: "AIzaSyAlRFJcV_9xjFUB9cNMcFXi9jpDFceCN3A",
+    authDomain: "arm-office.firebaseapp.com",
+    databaseURL: "https://arm-office.firebaseio.com",
+    projectId: "arm-office",
+    storageBucket: "arm-office.appspot.com",
+    messagingSenderId: "285503624679"
+  }
+}
+
 // import Data from '../assets/data.json';
 import Firebase from 'firebase'
 
