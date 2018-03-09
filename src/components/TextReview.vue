@@ -370,7 +370,7 @@ export default {
     },
     // Remove all special charater
     removeSpecialChar(str) {
-      return str.replace(/[`~!@#$^*()_|+=?;:<>\{\}\[\]\\]/gi, "")
+      return str.replace(/[~!@#$^*()_|+=?;:<>\{\}\[\]\\]/gi, "")
     },
     setDictData(wordEn, wordTh) {
       let wordLength = wordEn.split(' ').length
