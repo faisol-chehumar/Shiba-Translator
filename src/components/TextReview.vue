@@ -72,76 +72,10 @@
 </template>
 
 <script>
-// var user = prompt("Halooo!! Please Enter Your name.")
-// var configUser = ''
-// if(user.toLowerCase() === 'test') {
-//   configUser = {
-//     apiKey: "AIzaSyAnQd3kIaap9PwMV5M5nSBvmnu7SO7pLS0",
-//     authDomain: "shiba-translator.firebaseapp.com",
-//     databaseURL: "https://shiba-translator.firebaseio.com",
-//     projectId: "shiba-translator",
-//     storageBucket: "shiba-translator.appspot.com",
-//     messagingSenderId: "130395626012"
-//   }
-// }
-// if(user.toLowerCase() === 'arm') {
-//   configUser = {
-//     apiKey: "AIzaSyAilnfkpZ2lf6Yl86HveAj9RT3E9CG91Vc",
-//     authDomain: "arm-translation.firebaseapp.com",
-//     databaseURL: "https://arm-translation.firebaseio.com",
-//     projectId: "arm-translation",
-//     storageBucket: "arm-translation.appspot.com",
-//     messagingSenderId: "494144728490"
-//   }
-// }
-// if(user.toLowerCase() === 'chai') {
-//   configUser = {
-//     apiKey: "AIzaSyDIrJNoNCJ5TRb1DjkLrKdAO-qUhPVfhuQ",
-//     authDomain: "chai-translation.firebaseapp.com",
-//     databaseURL: "https://chai-translation.firebaseio.com",
-//     projectId: "chai-translation",
-//     storageBucket: "chai-translation.appspot.com",
-//     messagingSenderId: "903538595751"
-//   }
-// }
-// if(user.toLowerCase() === 'aong') {
-//   configUser = {
-//     apiKey: "AIzaSyCgvy6hGPf6FLIVvUQB4Mc7EMQIxmZBjKA",
-//     authDomain: "aong-translation.firebaseapp.com",
-//     databaseURL: "https://aong-translation.firebaseio.com",
-//     projectId: "aong-translation",
-//     storageBucket: "aong-translation.appspot.com",
-//     messagingSenderId: "902026764830"
-//   }
-// }
-
-// if(user.toLowerCase() === 'chai-office') {
-//   configUser = {
-//     apiKey: "AIzaSyAXsI7kc0gAdnb7aGIOmL76Akgd8rOVKL8",
-//     authDomain: "chai-office.firebaseapp.com",
-//     databaseURL: "https://chai-office.firebaseio.com",
-//     projectId: "chai-office",
-//     storageBucket: "chai-office.appspot.com",
-//     messagingSenderId: "186542880891"
-//   }
-// }
-
-// if(user.toLowerCase() === 'arm-office') {
-//   configUser = {
-//     apiKey: "AIzaSyAlRFJcV_9xjFUB9cNMcFXi9jpDFceCN3A",
-//     authDomain: "arm-office.firebaseapp.com",
-//     databaseURL: "https://arm-office.firebaseio.com",
-//     projectId: "arm-office",
-//     storageBucket: "arm-office.appspot.com",
-//     messagingSenderId: "285503624679"
-//   }
-// }
-
-// import Data from '../assets/data.json';
-import Firebase from 'firebase'
-
-// Integrate with Firebase service with Account
-let configUser = {
+var user = prompt("Halooo!! Please Enter Your name.")
+var configUser = ''
+if(user.toLowerCase() === 'test') {
+  configUser = {
     apiKey: "AIzaSyAnQd3kIaap9PwMV5M5nSBvmnu7SO7pLS0",
     authDomain: "shiba-translator.firebaseapp.com",
     databaseURL: "https://shiba-translator.firebaseio.com",
@@ -149,6 +83,72 @@ let configUser = {
     storageBucket: "shiba-translator.appspot.com",
     messagingSenderId: "130395626012"
   }
+}
+if(user.toLowerCase() === 'arm') {
+  configUser = {
+    apiKey: "AIzaSyAilnfkpZ2lf6Yl86HveAj9RT3E9CG91Vc",
+    authDomain: "arm-translation.firebaseapp.com",
+    databaseURL: "https://arm-translation.firebaseio.com",
+    projectId: "arm-translation",
+    storageBucket: "arm-translation.appspot.com",
+    messagingSenderId: "494144728490"
+  }
+}
+if(user.toLowerCase() === 'chai') {
+  configUser = {
+    apiKey: "AIzaSyDIrJNoNCJ5TRb1DjkLrKdAO-qUhPVfhuQ",
+    authDomain: "chai-translation.firebaseapp.com",
+    databaseURL: "https://chai-translation.firebaseio.com",
+    projectId: "chai-translation",
+    storageBucket: "chai-translation.appspot.com",
+    messagingSenderId: "903538595751"
+  }
+}
+if(user.toLowerCase() === 'aong') {
+  configUser = {
+    apiKey: "AIzaSyCgvy6hGPf6FLIVvUQB4Mc7EMQIxmZBjKA",
+    authDomain: "aong-translation.firebaseapp.com",
+    databaseURL: "https://aong-translation.firebaseio.com",
+    projectId: "aong-translation",
+    storageBucket: "aong-translation.appspot.com",
+    messagingSenderId: "902026764830"
+  }
+}
+
+if(user.toLowerCase() === 'chai-office') {
+  configUser = {
+    apiKey: "AIzaSyAXsI7kc0gAdnb7aGIOmL76Akgd8rOVKL8",
+    authDomain: "chai-office.firebaseapp.com",
+    databaseURL: "https://chai-office.firebaseio.com",
+    projectId: "chai-office",
+    storageBucket: "chai-office.appspot.com",
+    messagingSenderId: "186542880891"
+  }
+}
+
+if(user.toLowerCase() === 'arm-office') {
+  configUser = {
+    apiKey: "AIzaSyAlRFJcV_9xjFUB9cNMcFXi9jpDFceCN3A",
+    authDomain: "arm-office.firebaseapp.com",
+    databaseURL: "https://arm-office.firebaseio.com",
+    projectId: "arm-office",
+    storageBucket: "arm-office.appspot.com",
+    messagingSenderId: "285503624679"
+  }
+}
+
+// import Data from '../assets/data.json';
+import Firebase from 'firebase'
+
+// Integrate with Firebase service with Account
+// let configUser = {
+//     apiKey: "AIzaSyAnQd3kIaap9PwMV5M5nSBvmnu7SO7pLS0",
+//     authDomain: "shiba-translator.firebaseapp.com",
+//     databaseURL: "https://shiba-translator.firebaseio.com",
+//     projectId: "shiba-translator",
+//     storageBucket: "shiba-translator.appspot.com",
+//     messagingSenderId: "130395626012"
+//   }
 // let configUser = {
 // apiKey: "AIzaSyAilnfkpZ2lf6Yl86HveAj9RT3E9CG91Vc",
 //     authDomain: "arm-translation.firebaseapp.com",
