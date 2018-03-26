@@ -446,10 +446,10 @@ export default {
 
       for(let i = this.descJson.length - 1; i >= 0; i--) {
         translatedList.push({[i]: this.descJson[i].Translated})
-        console.log(this.wordEn)
-        console.log(this.wordTh)
+        // console.log(this.wordEn)
+        // console.log(this.wordTh)
         let newStr = this.descJson[i].Translated.replace(this.wordEn, this.wordTh)
-        console.log('work')
+        // console.log('work')
         this.descJson[i].Translated = newStr
         this.save(i, this.descJson[i].Translated)
       }
