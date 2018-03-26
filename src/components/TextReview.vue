@@ -270,7 +270,7 @@ export default {
     },
     autoTranslate() {
       let text = this.descJson[this.descPos].English
-      console.log('Auto translate: ' + text)
+      // console.log('Auto translate: ' + text)
       let translateText = this.processTranslate(text)
       console.log('Translate text: ' + translateText)
       // console.log(translateText)
@@ -315,7 +315,7 @@ export default {
       this.dictTable()
       let dictData = this.dictRef.length
       let keyword = this.dictRef
-      console.log('dictionary length: ' + dictData)
+      // console.log('dictionary length: ' + dictData)
       for (let i = dictData - 1; i >= 0; i--) {
         this.setDict(keyword[i]['.key'], keyword[i]['.value'])
       }
@@ -390,8 +390,8 @@ export default {
       let wordLength = wordEn.split(' ').length
       let engValidator = /^[a-zA-Z \.\!\?]*$/.test(wordEn)
       // Accept word only less than 3 word and only contain English alphabet
-      console.log('Set dict: ' + wordEn)
-      console.log(engValidator)
+      // console.log('Set dict: ' + wordEn)
+      // console.log(engValidator)
       if(wordLength <= 3 && engValidator === true ) {
         dbDict.ref(wordEn.toLowerCase()).set(wordTh)  
       }
@@ -415,7 +415,7 @@ export default {
       let re = ''
       let translatedList = []
       let wordEn = this.removeSpecialChar(this.wordEn)
-      console.log('Remove special character' + wordEn)
+      // console.log('Remove special character' + wordEn)
 
       if(wordEn !== '') {
         re = new RegExp(wordEn, 'g')
@@ -446,6 +446,8 @@ export default {
 
       for(let i = this.descJson.length - 1; i >= 0; i--) {
         translatedList.push({[i]: this.descJson[i].Translated})
+        console.log(this.wordEn)
+        console.log(this.wordTh)
         let newStr = this.descJson[i].Translated.replace(this.wordEn, this.wordTh)
         console.log('work')
         this.descJson[i].Translated = newStr
@@ -517,7 +519,7 @@ export default {
         if(e.which == 13 & !foo) {
           e.preventDefault()
           e.stopPropagation()
-          console.log('Enter')
+          // console.log('Enter')
           translate()
           foo = true;
         }
@@ -651,23 +653,23 @@ function translateBlock(blockLength, textLineByArray, dictionary) {
   let textPos = 0
   let translateBlock = []
   let textLineByArraySize = textLineByArray.length
-  console.log('textLineByArraySize: ' + textLineByArraySize)
+  // console.log('textLineByArraySize: ' + textLineByArraySize)
   // console.log('---------------')
   if(textLineByArraySize <  blockLength) {
     translateBlock = textLineByArray
   } else {
     for(let j = 0; j <= textLineByArraySize - 1; j++) {
       let word = getBlockWord(textLineByArray, blockLength, textPos)
-      console.log('word: ' + word)
+      // console.log('word: ' + word)
       let translatedWord = translate(word, dictionary)
       // console.log('translatedWord: ' + translatedWord)
       if(translatedWord !== undefined) {
-        console.log('translatedWord: ' + translatedWord)
+        // console.log('translatedWord: ' + translatedWord)
         translateBlock.push(translatedWord)
         j += (blockLength - 1)
         textPos += blockLength
       } else {
-        console.log('textLineByArray[j]: ' + textLineByArray[j])
+        // console.log('textLineByArray[j]: ' + textLineByArray[j])
         translateBlock.push(textLineByArray[j])
         textPos++
       }
@@ -681,18 +683,18 @@ function translateBlock(blockLength, textLineByArray, dictionary) {
 function translateByLine(textLine, dictionary) {
   // console.log('textline: ' + textLine)
   let textLineByArray = textLine.split(' ')
-  console.log('textLineByArray: ' + textLineByArray)
+  // console.log('textLineByArray: ' + textLineByArray)
   let blockLength = getBlockWordLength(textLineByArray)
-  console.log('blockLength: ' + blockLength)
+  // console.log('blockLength: ' + blockLength)
   let translateLine = []
   
   // Need refactory here seperate case with block length condition
   let stepOne = translateBlock(3, textLineByArray, dictionary)
-  console.log('stepOne: ' + stepOne)
+  // console.log('stepOne: ' + stepOne)
   let stepTwo = translateBlock(2, stepOne, dictionary)
-  console.log('stepTwo: ' + stepTwo)
+  // console.log('stepTwo: ' + stepTwo)
   let stepThree = translateBlock(1, stepTwo, dictionary)
-  console.log('stepThree: ' + stepThree)
+  // console.log('stepThree: ' + stepThree)
 
   return stepThree.join(' ')
 }
