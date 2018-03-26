@@ -61,6 +61,7 @@
           </div>
           <button class="ui blue button" @click="translate">Search and Replace</button>
           <button class="ui yellow button" @click="onePageReplace">One page replace</button>
+          <button class="ui button green" @click="specialTranslate">Replace</button>
           <button class="ui button" @click="prevDesc">Prev</button>
           <button class="ui button" @click="nextDesc">Next</button>
         </div>
@@ -71,76 +72,10 @@
 </template>
 
 <script>
-var user = prompt("Halooo!! Please Enter Your name.")
-var configUser = ''
-if(user.toLowerCase() === 'test') {
-  configUser = {
-    apiKey: "AIzaSyAnQd3kIaap9PwMV5M5nSBvmnu7SO7pLS0",
-    authDomain: "shiba-translator.firebaseapp.com",
-    databaseURL: "https://shiba-translator.firebaseio.com",
-    projectId: "shiba-translator",
-    storageBucket: "shiba-translator.appspot.com",
-    messagingSenderId: "130395626012"
-  }
-}
-if(user.toLowerCase() === 'arm') {
-  configUser = {
-    apiKey: "AIzaSyAilnfkpZ2lf6Yl86HveAj9RT3E9CG91Vc",
-    authDomain: "arm-translation.firebaseapp.com",
-    databaseURL: "https://arm-translation.firebaseio.com",
-    projectId: "arm-translation",
-    storageBucket: "arm-translation.appspot.com",
-    messagingSenderId: "494144728490"
-  }
-}
-if(user.toLowerCase() === 'chai') {
-  configUser = {
-    apiKey: "AIzaSyDIrJNoNCJ5TRb1DjkLrKdAO-qUhPVfhuQ",
-    authDomain: "chai-translation.firebaseapp.com",
-    databaseURL: "https://chai-translation.firebaseio.com",
-    projectId: "chai-translation",
-    storageBucket: "chai-translation.appspot.com",
-    messagingSenderId: "903538595751"
-  }
-}
-if(user.toLowerCase() === 'aong') {
-  configUser = {
-    apiKey: "AIzaSyCgvy6hGPf6FLIVvUQB4Mc7EMQIxmZBjKA",
-    authDomain: "aong-translation.firebaseapp.com",
-    databaseURL: "https://aong-translation.firebaseio.com",
-    projectId: "aong-translation",
-    storageBucket: "aong-translation.appspot.com",
-    messagingSenderId: "902026764830"
-  }
-}
-
-if(user.toLowerCase() === 'chai-office') {
-  configUser = {
-    apiKey: "AIzaSyAXsI7kc0gAdnb7aGIOmL76Akgd8rOVKL8",
-    authDomain: "chai-office.firebaseapp.com",
-    databaseURL: "https://chai-office.firebaseio.com",
-    projectId: "chai-office",
-    storageBucket: "chai-office.appspot.com",
-    messagingSenderId: "186542880891"
-  }
-}
-
-if(user.toLowerCase() === 'arm-office') {
-  configUser = {
-    apiKey: "AIzaSyAlRFJcV_9xjFUB9cNMcFXi9jpDFceCN3A",
-    authDomain: "arm-office.firebaseapp.com",
-    databaseURL: "https://arm-office.firebaseio.com",
-    projectId: "arm-office",
-    storageBucket: "arm-office.appspot.com",
-    messagingSenderId: "285503624679"
-  }
-}
-
-// import Data from '../assets/data.json';
-import Firebase from 'firebase'
-
-// Integrate with Firebase service with Account
-// let configUser = {
+// var user = prompt("Halooo!! Please Enter Your name.")
+// var configUser = ''
+// if(user.toLowerCase() === 'test') {
+//   configUser = {
 //     apiKey: "AIzaSyAnQd3kIaap9PwMV5M5nSBvmnu7SO7pLS0",
 //     authDomain: "shiba-translator.firebaseapp.com",
 //     databaseURL: "https://shiba-translator.firebaseio.com",
@@ -148,6 +83,72 @@ import Firebase from 'firebase'
 //     storageBucket: "shiba-translator.appspot.com",
 //     messagingSenderId: "130395626012"
 //   }
+// }
+// if(user.toLowerCase() === 'arm') {
+//   configUser = {
+//     apiKey: "AIzaSyAilnfkpZ2lf6Yl86HveAj9RT3E9CG91Vc",
+//     authDomain: "arm-translation.firebaseapp.com",
+//     databaseURL: "https://arm-translation.firebaseio.com",
+//     projectId: "arm-translation",
+//     storageBucket: "arm-translation.appspot.com",
+//     messagingSenderId: "494144728490"
+//   }
+// }
+// if(user.toLowerCase() === 'chai') {
+//   configUser = {
+//     apiKey: "AIzaSyDIrJNoNCJ5TRb1DjkLrKdAO-qUhPVfhuQ",
+//     authDomain: "chai-translation.firebaseapp.com",
+//     databaseURL: "https://chai-translation.firebaseio.com",
+//     projectId: "chai-translation",
+//     storageBucket: "chai-translation.appspot.com",
+//     messagingSenderId: "903538595751"
+//   }
+// }
+// if(user.toLowerCase() === 'aong') {
+//   configUser = {
+//     apiKey: "AIzaSyCgvy6hGPf6FLIVvUQB4Mc7EMQIxmZBjKA",
+//     authDomain: "aong-translation.firebaseapp.com",
+//     databaseURL: "https://aong-translation.firebaseio.com",
+//     projectId: "aong-translation",
+//     storageBucket: "aong-translation.appspot.com",
+//     messagingSenderId: "902026764830"
+//   }
+// }
+
+// if(user.toLowerCase() === 'chai-office') {
+//   configUser = {
+//     apiKey: "AIzaSyAXsI7kc0gAdnb7aGIOmL76Akgd8rOVKL8",
+//     authDomain: "chai-office.firebaseapp.com",
+//     databaseURL: "https://chai-office.firebaseio.com",
+//     projectId: "chai-office",
+//     storageBucket: "chai-office.appspot.com",
+//     messagingSenderId: "186542880891"
+//   }
+// }
+
+// if(user.toLowerCase() === 'arm-office') {
+//   configUser = {
+//     apiKey: "AIzaSyAlRFJcV_9xjFUB9cNMcFXi9jpDFceCN3A",
+//     authDomain: "arm-office.firebaseapp.com",
+//     databaseURL: "https://arm-office.firebaseio.com",
+//     projectId: "arm-office",
+//     storageBucket: "arm-office.appspot.com",
+//     messagingSenderId: "285503624679"
+//   }
+// }
+
+// import Data from '../assets/data.json';
+import Firebase from 'firebase'
+
+// Integrate with Firebase service with Account
+let configUser = {
+    apiKey: "AIzaSyAnQd3kIaap9PwMV5M5nSBvmnu7SO7pLS0",
+    authDomain: "shiba-translator.firebaseapp.com",
+    databaseURL: "https://shiba-translator.firebaseio.com",
+    projectId: "shiba-translator",
+    storageBucket: "shiba-translator.appspot.com",
+    messagingSenderId: "130395626012"
+  }
 // let configUser = {
 // apiKey: "AIzaSyAilnfkpZ2lf6Yl86HveAj9RT3E9CG91Vc",
 //     authDomain: "arm-translation.firebaseapp.com",
@@ -236,14 +237,14 @@ export default {
     },
     processTranslate(text) {
       let dictionary = this.descDict
-      // console.log(dictionary)
+      // console.log('dictionary: ' + dictionary)
       let textList = getTextList(text)
-      // console.log(textList)
+      // console.log('textList: ' + textList)
       let translateTextList = textList.map((textInLine) => {
-        // console.log(textInLine)
+        // console.log('textInLine: ' + textInLine)
         return translateByLine(textInLine, dictionary)
       })
-      // console.log(translateTextList)
+      // console.log('translateTextList: ' + translateTextList)
       let postText = setPostText(translateTextList)
       // console.log(postText)
       return postText
@@ -269,7 +270,9 @@ export default {
     },
     autoTranslate() {
       let text = this.descJson[this.descPos].English
+      console.log('Auto translate: ' + text)
       let translateText = this.processTranslate(text)
+      console.log('Translate text: ' + translateText)
       // console.log(translateText)
       this.save(this.descPos, translateText)
       this.getPreview()
@@ -381,13 +384,13 @@ export default {
     },
     // Remove all special charater
     removeSpecialChar(str) {
-      return str.replace(/[~!@#$^*()_|+=?;:<>\{\}\[\]\\]/gi, "")
+      return str.replace(/[~!@#$^*()_|=?;:<>\{\}\[\]\\]/gi, "")
     },
     setDictData(wordEn, wordTh) {
       let wordLength = wordEn.split(' ').length
-      let engValidator = /[a-zA-Z]+(-[a-zA-Z]+)*$/.test(wordEn)
+      let engValidator = /^[a-zA-Z \.\!\?]*$/.test(wordEn)
       // Accept word only less than 3 word and only contain English alphabet
-      console.log(wordEn)
+      console.log('Set dict: ' + wordEn)
       console.log(engValidator)
       if(wordLength <= 3 && engValidator === true ) {
         dbDict.ref(wordEn.toLowerCase()).set(wordTh)  
@@ -412,6 +415,7 @@ export default {
       let re = ''
       let translatedList = []
       let wordEn = this.removeSpecialChar(this.wordEn)
+      console.log('Remove special character' + wordEn)
 
       if(wordEn !== '') {
         re = new RegExp(wordEn, 'g')
@@ -436,6 +440,24 @@ export default {
       this.updateTranslate()
       this.setDictData(wordEn, this.wordTh)
       // this.wordTh = ''
+    },
+    specialTranslate() {
+      let translatedList = []
+
+      for(let i = this.descJson.length - 1; i >= 0; i--) {
+        translatedList.push({[i]: this.descJson[i].Translated})
+        let newStr = this.descJson[i].Translated.replace(this.wordEn, this.wordTh)
+        console.log('work')
+        this.descJson[i].Translated = newStr
+        this.save(i, this.descJson[i].Translated)
+      }
+
+      // console.log('translate')
+      // Translated History Handle
+      this.translatedHistory.pop()
+      this.translatedHistory.push(translatedList)
+
+      this.updateTranslate()
     },
     updateTranslate() {
       this.getPreview()
@@ -480,8 +502,10 @@ export default {
       var text = ''
       if (window.getSelection) {
         text = window.getSelection().toString()
+        // console.log(text)
       } else if (document.selection && document.selection.type != "Control") {
         text = document.selection.createRange().text
+        // console.log(text)
       }
       this.wordEn = text
       // let nextPage = this.nextDesc()
@@ -575,6 +599,7 @@ function translate(word, dictionary) {
   // return (dictionary[word] !== undefined) ? dictionary[word] : word 
   // console.log('word: ' + word)
   word = word.replace(/((\s*\S+)*)\s*/, "$1")
+  // console.log('test: ' + word)
   let format = /[`~!@#$%^*()_|+=?;:<>\{\}\[\]\\]/
   let lastStrPos = word.length - 1
   let validWord = word
@@ -626,22 +651,26 @@ function translateBlock(blockLength, textLineByArray, dictionary) {
   let textPos = 0
   let translateBlock = []
   let textLineByArraySize = textLineByArray.length
-  // console.log(textLineByArraySize)
+  console.log('textLineByArraySize: ' + textLineByArraySize)
   // console.log('---------------')
   if(textLineByArraySize <  blockLength) {
     translateBlock = textLineByArray
   } else {
     for(let j = 0; j <= textLineByArraySize - 1; j++) {
       let word = getBlockWord(textLineByArray, blockLength, textPos)
-      // console.log(word)
+      console.log('word: ' + word)
       let translatedWord = translate(word, dictionary)
+      // console.log('translatedWord: ' + translatedWord)
       if(translatedWord !== undefined) {
+        console.log('translatedWord: ' + translatedWord)
         translateBlock.push(translatedWord)
         j += (blockLength - 1)
+        textPos += blockLength
       } else {
+        console.log('textLineByArray[j]: ' + textLineByArray[j])
         translateBlock.push(textLineByArray[j])
+        textPos++
       }
-      textPos++
     }
   }
 
@@ -650,13 +679,20 @@ function translateBlock(blockLength, textLineByArray, dictionary) {
 }
 
 function translateByLine(textLine, dictionary) {
+  // console.log('textline: ' + textLine)
   let textLineByArray = textLine.split(' ')
+  console.log('textLineByArray: ' + textLineByArray)
   let blockLength = getBlockWordLength(textLineByArray)
+  console.log('blockLength: ' + blockLength)
   let translateLine = []
   
+  // Need refactory here seperate case with block length condition
   let stepOne = translateBlock(3, textLineByArray, dictionary)
+  console.log('stepOne: ' + stepOne)
   let stepTwo = translateBlock(2, stepOne, dictionary)
+  console.log('stepTwo: ' + stepTwo)
   let stepThree = translateBlock(1, stepTwo, dictionary)
+  console.log('stepThree: ' + stepThree)
 
   return stepThree.join(' ')
 }
