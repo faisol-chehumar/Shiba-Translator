@@ -272,7 +272,7 @@ export default {
       let text = this.descJson[this.descPos].English
       // console.log('Auto translate: ' + text)
       let translateText = this.processTranslate(text)
-      console.log('Translate text: ' + translateText)
+      // console.log('Translate text: ' + translateText)
       // console.log(translateText)
       this.save(this.descPos, translateText)
       this.getPreview()
@@ -443,15 +443,25 @@ export default {
     },
     specialTranslate() {
       let translatedList = []
-
       for(let i = this.descJson.length - 1; i >= 0; i--) {
-        translatedList.push({[i]: this.descJson[i].Translated})
+        this.descJson[i].Translated = this.descJson[i].Translated.replace(/\s\s+/g, ' ')
         // console.log(this.wordEn)
         // console.log(this.wordTh)
-        let newStr = this.descJson[i].Translated.replace(this.wordEn, this.wordTh)
-        // console.log('work')
-        this.descJson[i].Translated = newStr
-        this.save(i, this.descJson[i].Translated)
+        // console.log(this.descJson[i].Translated.search(this.wordEn))
+        let regWord = '(' + this.wordEn.replace(/\(/g, '\\(').replace(/\)/g, '\\)') + ')'
+        // console.log(this.descJson[i].Translated.match(regWord))
+        // let re = new RegExp(this.wordEn, 'g')
+        if(this.descJson[i].Translated.match(regWord) !== null) {
+          translatedList.push({[i]: this.descJson[i].Translated})
+          // console.log(this.wordEn)
+          // console.log(this.wordTh)
+          let newStr = this.descJson[i].Translated.replace(this.wordEn, this.wordTh)
+          // console.log('work')
+          // console.log(newStr)
+          this.descJson[i].Translated = newStr
+          // console.log(this.descJson[i].Translated)
+          this.save(i, this.descJson[i].Translated)
+        }
       }
 
       // console.log('translate')
