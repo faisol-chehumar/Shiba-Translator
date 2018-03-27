@@ -444,6 +444,7 @@ export default {
     specialTranslate() {
       let translatedList = []
       for(let i = this.descJson.length - 1; i >= 0; i--) {
+        // console.log(this.descJson[i].Translated)
         this.descJson[i].Translated = this.descJson[i].Translated.replace(/\s\s+/g, ' ')
         // console.log(this.wordEn)
         // console.log(this.wordTh)
