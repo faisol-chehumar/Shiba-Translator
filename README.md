@@ -1,21 +1,24 @@
 # translate-app
+> This tool use by translator staff. It can help them automatic search and replace keyword from dictionary database.
 
-> use for translate description
+## Features
 
-## Build Setup
++ Auto translate word that in dictionary database.
++ Preview original page from website.
++ Preview original word and strip all html tag. Show only Regular word.
++ Realtime-Sync with Firebase-Database
 
-``` bash
-# install dependencies
-npm install
+## Tech
 
-# serve with hot reload at localhost:8080
-npm run dev
++ VueJs
+- Firebase-Database
 
-# build for production with minification
-npm run build
+## See example
 
-# build for production and view the bundle analyzer report
-npm run build --report
-```
++ You can see Demo here >>> https://translator-tool.netlify.com/
++ From alert prompt type >>> Test
++ Press Load button on top navigation bar.
++ Press Auto Translate All to run translaator function.
++ Feel free to test it!
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+![Translator_img](https://res.cloudinary.com/dbzxmgk2h/image/upload/v1541668859/shina-translator-tool.jpg)
